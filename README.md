@@ -6,7 +6,7 @@
 ![Flask](https://img.shields.io/badge/flask-2.3.x-green.svg)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0-orange)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![MUBAS Student](https://img.shields.io/badge/MUBAS-3rd_Year_BIT-purple)
+![MUBAS Student](https://img.shields.io/badge/MUBAS-3rd_Year_MIS-purple)
 ![Status](https://img.shields.io/badge/status-in_development-yellow)
 
 **Turning Business Data into Smart Decisions - A Student Project**
