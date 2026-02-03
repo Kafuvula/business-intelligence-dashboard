@@ -103,6 +103,8 @@ Staff: staff@test.com / password123
 
 📁 How the Project is Organized
 
+ ```bash
+
 business-dashboard/
 ├── app/                    # Main application folder
 │   ├── __init__.py        # Makes this a Python package
@@ -246,5 +248,5 @@ Project Status: Actively Developing
 Commitment: Daily progress updates
 
 </div> 
-
+```
 
