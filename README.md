@@ -89,6 +89,7 @@ python run.py
 
 # 5. Open in browser
 # Go to: http://localhost:5000
+
 ```
 
 Default Login (for testing):
@@ -127,6 +128,7 @@ business-dashboard/
 ├── config.py           # Settings (don't share publicly!)
 ├── run.py              # Starts the application
 └── README.md           # This file!
+
 
 🔧 What I'm Working On Now
 This Week's Goals:
@@ -243,7 +245,6 @@ Last Updated: February 2026
 Project Status: Actively Developing
 Commitment: Daily progress updates
 
-</div> ```
-
+</div> 
 
 
