@@ -8,6 +8,7 @@ import sys
 from app import create_app
 from app.models import db
 from flask_migrate import Migrate
+import click
 
 # Create application instance
 app = create_app()
@@ -235,10 +236,10 @@ if __name__ == "__main__":
     # Run the application
     print("Starting Business Intelligence Dashboard...")
     print(f"Debug mode: {app.debug}")
-    print(f"Environment: {app.config['ENV']}")
+    print(f"Environment: {app.config.get('ENV', 'production')}")
     
     app.run(
         host=os.getenv('FLASK_HOST', '0.0.0.0'),
         port=int(os.getenv('FLASK_PORT', 5000)),
-        debug=app.config['DEBUG']
+        debug=app.config.get('DEBUG', False)
     )

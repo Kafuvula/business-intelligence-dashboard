@@ -50,7 +50,17 @@ def sales():
 def inventory():
     """Inventory management page"""
     products = Product.query.order_by(Product.name).all()
-    return render_template('inventory.html', products=products)
+
+    # Summary values for the inventory dashboard
+    total_stock_value = sum((p.stock_quantity or 0) * (p.cost or 0) for p in products)
+    low_stock_count = sum(1 for p in products if (p.stock_quantity or 0) < (p.min_stock or 0))
+    out_of_stock_count = sum(1 for p in products if (p.stock_quantity or 0) == 0)
+
+    return render_template('inventory.html',
+                           products=products,
+                           total_stock_value=total_stock_value,
+                           low_stock_count=low_stock_count,
+                           out_of_stock_count=out_of_stock_count)
 
 @main_bp.route('/customers')
 @login_required

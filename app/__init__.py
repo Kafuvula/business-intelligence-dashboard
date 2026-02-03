@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from datetime import datetime
 import os
 
 # Initialize extensions
@@ -9,7 +10,10 @@ login_manager = LoginManager()
 
 def create_app(config_name='default'):
     """Application factory function"""
-    app = Flask(__name__)
+    # Serve static files from the project-level `static/` folder
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    static_dir = os.path.join(project_root, 'static')
+    app = Flask(__name__, static_folder=static_dir, static_url_path='/static')
     
     # Load configuration
     from config import config
@@ -25,7 +29,8 @@ def create_app(config_name='default'):
     login_manager.login_message_category = 'info'
     
     # Register blueprints
-    from app.routes import main_bp, auth_bp
+    from app.routes import main_bp
+    from app.auth import auth_bp
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp)
     
@@ -40,5 +45,9 @@ def create_app(config_name='default'):
         from app.models import User
         from app.auth import create_default_admin
         create_default_admin()
-    
+
+    @app.context_processor
+    def inject_current_year():
+        return {'current_year': datetime.now().year}
+
     return app
