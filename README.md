@@ -130,40 +130,28 @@ business-dashboard/
 ├── config.py           # Settings (don't share publicly!)
 ├── run.py              # Starts the application
 └── README.md           # This file!
+```
 
 
 🔧 What I'm Working On Now
 This Week's Goals:
-
 Set up basic Flask application
-
 Create database tables
-
 Design main dashboard layout
-
 Add sales chart
-
 Create login system
-
 Write tests for core features
 
 Coming Soon:
-
 Email alerts for low stock
-
 Customer loyalty tracking
-
 Expense categorization
-
 Multi-business support (for franchises)
 
 🤝 Want to Help or Learn?
 I'm still learning, so if you see something I could do better:
-
 Found a bug? Open an Issue
-
 Have an idea? Start a Discussion
-
 Want to add code? Make a Pull Request
 
 For fellow MUBAS students:
@@ -171,13 +159,9 @@ If you're working on something similar or need help with your projects, feel fre
 
 🚀 What I've Learned So Far
 Building this has taught me:
-
 Planning matters - I spent 2 days just designing the database before writing any code
-
 Small steps win - Instead of building everything at once, I add one feature at a time
-
 Testing saves time - Writing tests feels slow but catches bugs early
-
 Documentation is key - If I don't write it down, I forget why I did something
 
 📚 Challenges I Faced (And How I Solved Them)
@@ -195,16 +179,13 @@ Solution: Created role-based permissions system
 
 🎯 My Goals for This Project
 Academic: Get 85%+ in Programming III practical assessment
-
 Portfolio: Have a complete project to show employers
-
 Learning: Truly understand how full applications are built
-
 Helpful: Maybe someone can actually use this for their business
 
 👨‍💻 About Me
 Name: Gomezgani Chirwa
-Program: Bachelor of Management Informations Systems (Year 3)
+Program: Bachelor of Management Information Systems (Year 3)
 University: Malawi University of Business and Applied Sciences (MUBAS)
 Focus Area: Management Information Systems
 Career Goal: Building technology solutions for African businesses
@@ -220,13 +201,9 @@ School: 3rd Year MIS Student at MUBAS
 
 💬 Let's Connect!
 I'm always happy to:
-
 Chat about tech projects
-
 Help fellow students
-
 Learn from experienced developers
-
 Discuss business technology in Malawi
 
 📄 Important Notes
