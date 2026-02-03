@@ -75,7 +75,7 @@ If you're a student or developer who wants to run this locally:
 
 ```bash
 # 1. Get the code
-git clone https://github.com/kafuvula/business-intelligence-dashboard.git
+git clone https://github.com/Kafuvula/business-intelligence-dashboard.git
 cd business-intelligence-dashboard
 
 # 2. Install Python packages

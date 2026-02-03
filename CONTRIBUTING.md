@@ -7,7 +7,7 @@ Thank you for your interest in contributing to the Business Intelligence Dashboa
 1. **Fork the repository** on GitHub
 2. **Clone your fork** locally:
    ```bash
-   git clone https://github.com/kafuvula/business-intelligence-dashboard.git
+   git clone https://github.com/Kafuvula/business-intelligence-dashboard.git
    cd business-intelligence-dashboard
 
    Set up development environment:
