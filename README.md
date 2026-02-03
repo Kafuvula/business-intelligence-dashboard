@@ -132,7 +132,7 @@ business-dashboard/
 └── README.md           # This file!
 ```
 
-
+```bash
 🔧 What I'm Working On Now
 This Week's Goals:
 Set up basic Flask application
