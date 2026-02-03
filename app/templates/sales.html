@@ -1,0 +1,243 @@
+{% extends "base.html" %}
+
+{% block title %}Sales{% endblock %}
+
+{% block extra_css %}
+<style>
+    .sale-card {
+        transition: all 0.3s;
+    }
+    .sale-card:hover {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .badge-paid {
+        background-color: #28a745;
+    }
+    .badge-pending {
+        background-color: #ffc107;
+        color: #000;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1><i class="bi bi-cash-stack"></i> Sales Management</h1>
+            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newSaleModal">
+                <i class="bi bi-plus-circle"></i> New Sale
+            </a>
+        </div>
+        <p class="text-muted">View and manage all sales transactions</p>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">Date From</label>
+                        <input type="date" class="form-control" id="dateFrom">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Date To</label>
+                        <input type="date" class="form-control" id="dateTo">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Customer</label>
+                        <select class="form-select" id="customerFilter">
+                            <option value="">All Customers</option>
+                            {% for customer in customers %}
+                            <option value="{{ customer.id }}">{{ customer.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="button" class="btn btn-outline-primary w-100" onclick="filterSales()">
+                            <i class="bi bi-funnel"></i> Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sales Summary -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2">Total Sales</h6>
+                <h3 class="card-title">MWK {{ "%.2f"|format(total_sales|default(0)) }}</h3>
+                <small>All time</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2">Today's Sales</h6>
+                <h3 class="card-title">MWK {{ "%.2f"|format(today_total|default(0)) }}</h3>
+                <small>{{ today_date }}</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2">Total Transactions</h6>
+                <h3 class="card-title">{{ sales|length }}</h3>
+                <small>Completed sales</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-2">Avg. Transaction</h6>
+                <h3 class="card-title">MWK {{ "%.2f"|format(avg_transaction|default(0)) }}</h3>
+                <small>Per sale</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Sales Table -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Sales History</h5>
+            </div>
+            <div class="card-body">
+                {% if sales %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Date & Time</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total Amount</th>
+                                <th>Payment</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sale in sales %}
+                            <tr>
+                                <td>
+                                    <strong>{{ sale.invoice_number }}</strong>
+                                </td>
+                                <td>
+                                    {{ sale.sale_date.strftime('%Y-%m-%d') }}<br>
+                                    <small class="text-muted">{{ sale.sale_date.strftime('%H:%M') }}</small>
+                                </td>
+                                <td>
+                                    {% if sale.customer %}
+                                        {{ sale.customer.name }}
+                                    {% else %}
+                                        <span class="text-muted">Walk-in</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ sale.items|length }} items</td>
+                                <td>
+                                    <strong>MWK {{ "%.2f"|format(sale.total_amount) }}</strong>
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">{{ sale.payment_method|default('Cash') }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge badge-paid">Paid</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="viewSale({{ sale.id }})">
+                                        <i class="bi bi-eye"></i> View
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-success" onclick="printInvoice({{ sale.id }})">
+                                        <i class="bi bi-printer"></i> Print
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-cart-x display-1 text-muted"></i>
+                    <h4 class="mt-3">No Sales Yet</h4>
+                    <p class="text-muted">Start making sales to see them here</p>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newSaleModal">
+                        <i class="bi bi-plus-circle"></i> Create First Sale
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Sale Modal -->
+<div class="modal fade" id="newSaleModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">New Sale</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted">This feature is under development. For now, you can view existing sales.</p>
+                <p>Coming soon: Full point-of-sale system with receipt printing!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary disabled">Save Sale</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function filterSales() {
+        const dateFrom = document.getElementById('dateFrom').value;
+        const dateTo = document.getElementById('dateTo').value;
+        const customer = document.getElementById('customerFilter').value;
+        
+        alert(`Filtering sales from ${dateFrom} to ${dateTo}, customer: ${customer || 'All'}`);
+        // In real implementation, this would make an AJAX request
+    }
+    
+    function viewSale(saleId) {
+        alert(`Viewing sale #${saleId}\n\nThis would show sale details in a modal.`);
+    }
+    
+    function printInvoice(saleId) {
+        alert(`Printing invoice for sale #${saleId}\n\nThis would generate a printable receipt.`);
+    }
+</script>
+{% endblock %}

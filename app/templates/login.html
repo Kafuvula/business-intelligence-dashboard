@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <h2><i class="bi bi-graph-up text-primary"></i></h2>
+                    <h3 class="card-title">Business Dashboard</h3>
+                    <p class="text-muted">Sign in to your account</p>
+                </div>
+                
+                <form method="POST" action="{{ url_for('auth.login') }}">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                        <label class="form-check-label" for="remember">Remember me</label>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </button>
+                    </div>
+                </form>
+                
+                <hr class="my-4">
+                
+                <div class="text-center">
+                    <p class="mb-0">Don't have an account?</p>
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-outline-secondary btn-sm mt-2">
+                        Create Account
+                    </a>
+                </div>
+                
+                <!-- Demo Credentials (Remove in production) -->
+                <div class="mt-4 p-3 bg-light rounded">
+                    <small class="text-muted">
+                        <strong>Demo Credentials:</strong><br>
+                        Admin: admin / admin123<br>
+                        Staff: staff1 / password123
+                    </small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-3">
+            <small class="text-muted">
+                Developed by Gomezgani Chirwa - MUBAS MIS Year 3<br>
+                <a href="https://github.com/gomezgani/business-intelligence-dashboard" class="text-decoration-none">
+                    <i class="bi bi-github"></i> View Project on GitHub
+                </a>
+            </small>
+        </div>
+    </div>
+</div>
+{% endblock %}

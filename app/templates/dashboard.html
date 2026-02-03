@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stat-card {
+        transition: transform 0.3s;
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+    .card-icon {
+        font-size: 2.5rem;
+        opacity: 0.8;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1><i class="bi bi-speedometer2"></i> Dashboard</h1>
+        <p class="text-muted">Welcome back, {{ current_user.username }}! Here's your business overview.</p>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row mb-4" id="statsCards">
+    <!-- Stats will be loaded by JavaScript -->
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card border-primary">
+            <div class="card-body text-center">
+                <div class="card-icon text-primary mb-2">
+                    <i class="bi bi-currency-exchange"></i>
+                </div>
+                <h5 class="card-title">Today's Sales</h5>
+                <h3 id="todaySales" class="card-text">Loading...</h3>
+                <p id="salesChange" class="card-text text-muted"></p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card border-success">
+            <div class="card-body text-center">
+                <div class="card-icon text-success mb-2">
+                    <i class="bi bi-calendar-month"></i>
+                </div>
+                <h5 class="card-title">This Month</h5>
+                <h3 id="monthSales" class="card-text">Loading...</h3>
+                <p class="card-text text-muted">Total revenue</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card border-warning">
+            <div class="card-body text-center">
+                <div class="card-icon text-warning mb-2">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+                <h5 class="card-title">Low Stock</h5>
+                <h3 id="lowStockCount" class="card-text">Loading...</h3>
+                <p class="card-text text-muted">Needs attention</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-3">
+        <div class="card stat-card border-info">
+            <div class="card-body text-center">
+                <div class="card-icon text-info mb-2">
+                    <i class="bi bi-people"></i>
+                </div>
+                <h5 class="card-title">Customers</h5>
+                <h3 id="totalCustomers" class="card-text">Loading...</h3>
+                <p class="card-text text-muted">Total registered</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts and Tables -->
+<div class="row">
+    <!-- Sales Chart -->
+    <div class="col-lg-8 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-bar-chart"></i> Sales Trend (Last 6 Months)</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="salesChart" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Low Stock Alert -->
+    <div class="col-lg-4 mb-4">
+        <div class="card border-warning">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> Low Stock Alert</h5>
+            </div>
+            <div class="card-body">
+                {% if low_stock %}
+                <div class="list-group">
+                    {% for product in low_stock %}
+                    <div class="list-group-item list-group-item-warning">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ product.name }}</h6>
+                            <small>Stock: {{ product.stock_quantity }}</small>
+                        </div>
+                        <small class="text-muted">Min: {{ product.min_stock }}</small>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-center text-muted my-3">
+                    <i class="bi bi-check-circle-fill text-success"></i><br>
+                    All products have sufficient stock
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Sales -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Sales</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_sales %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Payment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sale in recent_sales %}
+                            <tr>
+                                <td>{{ sale.invoice_number }}</td>
+                                <td>{{ sale.sale_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>
+                                    {% if sale.customer %}
+                                        {{ sale.customer.name }}
+                                    {% else %}
+                                        Walk-in
+                                    {% endif %}
+                                </td>
+                                <td>MWK {{ "%.2f"|format(sale.total_amount) }}</td>
+                                <td>
+                                    <span class="badge bg-secondary">{{ sale.payment_method|default('Cash') }}</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-center text-muted my-3">No sales recorded yet</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+<script>
+    // Load dashboard stats
+    loadDashboardStats();
+    
+    // Load sales chart
+    loadSalesChart();
+</script>
+{% endblock %}

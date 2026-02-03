@@ -105,7 +105,7 @@ Staff: staff@test.com / password123
 
  ```bash
 
-business-dashboard/
+business-intelligence-dashboard/
 ├── app/                    # Main application folder
 │   ├── __init__.py        # Makes this a Python package
 │   ├── routes.py          # All website pages

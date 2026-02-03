@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <h2><i class="bi bi-person-plus text-primary"></i></h2>
+                    <h3 class="card-title">Create Account</h3>
+                    <p class="text-muted">Join our business dashboard</p>
+                </div>
+                
+                <form method="POST" action="{{ url_for('auth.register') }}">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                        <div class="form-text">Choose a unique username</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                        <div class="form-text">We'll never share your email</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        <div class="form-text">At least 6 characters</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-person-plus"></i> Create Account
+                        </button>
+                    </div>
+                </form>
+                
+                <hr class="my-4">
+                
+                <div class="text-center">
+                    <p class="mb-0">Already have an account?</p>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-sm mt-2">
+                        <i class="bi bi-box-arrow-in-right"></i> Login Here
+                    </a>
+                </div>
+                
+                <div class="mt-4 p-3 bg-light rounded">
+                    <small class="text-muted">
+                        <strong>Note for Students:</strong><br>
+                        This is a demo system. New accounts get "staff" role by default.<br>
+                        Ask the admin for manager access if needed for testing.
+                    </small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-3">
+            <small class="text-muted">
+                Part of MUBAS Programming III Project<br>
+                <a href="https://github.com/gomezgani/business-intelligence-dashboard" class="text-decoration-none">
+                    <i class="bi bi-github"></i> View Source Code
+                </a>
+            </small>
+        </div>
+    </div>
+</div>
+{% endblock %}

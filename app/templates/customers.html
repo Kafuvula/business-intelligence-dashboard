@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+
+{% block title %}Customers{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1><i class="bi bi-people"></i> Customer Management</h1>
+            <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+                <i class="bi bi-person-plus"></i> Add Customer
+            </a>
+        </div>
+        <p class="text-muted">Manage your customer relationships</p>
+    </div>
+</div>
+
+<!-- Customer Stats -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card border-primary">
+            <div class="card-body text-center">
+                <h6 class="card-subtitle mb-2 text-muted">Total Customers</h6>
+                <h2 class="card-title">{{ customers|length }}</h2>
+                <small class="text-muted">Registered customers</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-success">
+            <div class="card-body text-center">
+                <h6 class="card-subtitle mb-2 text-muted">Regular Customers</h6>
+                <h2 class="card-title">{{ regular_count|default(0) }}</h2>
+                <small class="text-muted">3+ purchases</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-warning">
+            <div class="card-body text-center">
+                <h6 class="card-subtitle mb-2 text-muted">New This Month</h6>
+                <h2 class="card-title">{{ new_this_month|default(0) }}</h2>
+                <small class="text-muted">First-time buyers</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-info">
+            <div class="card-body text-center">
+                <h6 class="card-subtitle mb-2 text-muted">Top Spender</h6>
+                <h2 class="card-title">MWK {{ top_spender|default(0) }}</h2>
+                <small class="text-muted">Highest purchase</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search Customers -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search customers by name, email, or phone..." id="searchCustomer">
+                    <button class="btn btn-outline-primary" type="button" onclick="searchCustomers()">
+                        <i class="bi bi-search"></i> Search
+                    </button>
+                    <button class="btn btn-outline-secondary" type="button" onclick="clearSearch()">
+                        <i class="bi bi-x-circle"></i> Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Customers List -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Customer Directory</h5>
+                <div>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="exportCustomers()">
+                        <i class="bi bi-download"></i> Export
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                {% if customers %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Contact</th>
+                                <th>Type</th>
+                                <th>Total Spent</th>
+                                <th>Last Purchase</th>
+                                <th>Total Orders</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for customer in customers %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3 bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                            {{ customer.name[0]|upper }}
+                                        </div>
+                                        <div>
+                                            <strong>{{ customer.name }}</strong><br>
+                                            <small class="text-muted">Joined: {{ customer.created_at.strftime('%Y-%m-%d') }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if customer.email %}
+                                    <div><i class="bi bi-envelope"></i> {{ customer.email }}</div>
+                                    {% endif %}
+                                    {% if customer.phone %}
+                                    <div><i class="bi bi-telephone"></i> {{ customer.phone }}</div>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge {% if customer.customer_type == 'wholesale' %}bg-success{% else %}bg-secondary{% endif %}">
+                                        {{ customer.customer_type|title }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% set total_spent = calculate_customer_total(customer) %}
+                                    <strong>MWK {{ "%.2f"|format(total_spent) }}</strong>
+                                </td>
+                                <td>
+                                    {% set last_purchase = get_last_purchase(customer) %}
+                                    {% if last_purchase %}
+                                    {{ last_purchase.strftime('%Y-%m-%d') }}
+                                    {% else %}
+                                    <span class="text-muted">No purchases</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% set order_count = get_order_count(customer) %}
+                                    <span class="badge {% if order_count > 5 %}bg-success{% elif order_count > 0 %}bg-primary{% else %}bg-secondary{% endif %}">
+                                        {{ order_count }} orders
+                                    </span>
+                                </td>
+                                <td>
+                                    {% set order_count = get_order_count(customer) %}
+                                    {% if order_count > 5 %}
+                                    <span class="badge bg-success">VIP</span>
+                                    {% elif order_count > 0 %}
+                                    <span class="badge bg-primary">Active</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">New</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-primary" onclick="viewCustomer({{ customer.id }})">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                        <button class="btn btn-outline-success" onclick="editCustomer({{ customer.id }})">
+                                            <i class="bi bi-pencil"></i>
+                                        </button>
+                                        <button class="btn btn-outline-info" onclick="contactCustomer({{ customer.id }})">
+                                            <i class="bi bi-chat"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="bi bi-people display-1 text-muted"></i>
+                    <h4 class="mt-3">No Customers Yet</h4>
+                    <p class="text-muted">Add your first customer to get started</p>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+                        <i class="bi bi-person-plus"></i> Add First Customer
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Customer Modal -->
+<div class="modal fade" id="addCustomerModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Customer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="customerForm">
+                    <div class="mb-3">
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <textarea class="form-control" rows="2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Customer Type</label>
+                        <select class="form-select">
+                            <option value="retail">Retail Customer</option>
+                            <option value="wholesale">Wholesale Customer</option>
+                            <option value="business">Business Client</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="saveCustomer()">Save Customer</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function searchCustomers() {
+        const query = document.getElementById('searchCustomer').value;
+        if (query.trim() === '') {
+            alert('Please enter search terms');
+            return;
+        }
+        alert(`Searching for: "${query}"\n\nThis would filter the customer list.`);
+    }
+    
+    function clearSearch() {
+        document.getElementById('searchCustomer').value = '';
+        alert('Search cleared. Showing all customers.');
+    }
+    
+    function viewCustomer(id) {
+        alert(`Viewing customer #${id}\n\nThis would show customer details and purchase history.`);
+    }
+    
+    function editCustomer(id) {
+        alert(`Editing customer #${id}\n\nThis would open edit form.`);
+    }
+    
+    function contactCustomer(id) {
+        alert(`Contacting customer #${id}\n\nThis would open email/sms interface.`);
+    }
+    
+    function exportCustomers() {
+        alert('Exporting customer list to CSV...\n\nThis would download a CSV file.');
+    }
+    
+    function saveCustomer() {
+        alert('Customer saved successfully!\n\nIn real implementation, this would send data to server.');
+        $('#addCustomerModal').modal('hide');
+    }
+</script>
+{% endblock %}
