@@ -89,7 +89,7 @@ python run.py
 
 # 5. Open in browser
 # Go to: http://localhost:5000
-
+```
 
 Default Login (for testing):
 Manager: admin@test.com / password123
@@ -243,8 +243,7 @@ Last Updated: February 2026
 Project Status: Actively Developing
 Commitment: Daily progress updates
 
-</div>
- ```
+</div> ```
 
 
 
