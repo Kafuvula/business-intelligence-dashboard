@@ -313,3 +313,31 @@ function exportDashboardData() {
 
 // Initialize dashboard when DOM is loaded
 document.addEventListener('DOMContentLoaded', initDashboard);
+
+// Ensure footer with developer details is always present and correct
+(function() {
+    const desiredFooterHTML = `
+        <div class="container">
+            <p class="mb-0">
+                <small>
+                    Business Dashboard &copy; ${new Date().getFullYear()} | 
+                    Developed by Gomezgani Chirwa - MUBAS MIS Year 3 |
+                    <a href="https://github.com/gomezgani/business-intelligence-dashboard" class="text-decoration-none">
+                        <i class="bi bi-github"></i> View on GitHub
+                    </a>
+                </small>
+            </p>
+        </div>
+    `;
+    
+    let footer = document.querySelector('footer');
+    if (footer) {
+        footer.className = 'bg-light text-center py-3 mt-5 border-top';
+        footer.innerHTML = desiredFooterHTML;
+    } else {
+        footer = document.createElement('footer');
+        footer.className = 'bg-light text-center py-3 mt-5 border-top';
+        footer.innerHTML = desiredFooterHTML;
+        document.body.appendChild(footer);
+    }
+})();

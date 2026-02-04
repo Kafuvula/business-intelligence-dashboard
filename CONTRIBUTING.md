@@ -285,15 +285,10 @@ CIS-CGR-311: Data visualization
 CIS-OPS-311: Deployment and maintenance
 
 CIS-REM-311: Systematic development process
+```
+```bash
+Add your Contributor Details Below:
+1. Gomezgani Chirwa BIS/24/ME/147
 
-Next Steps:
-Push to GitHub: Create your repository and push all files
 
-Customize: Add your personal details in README.md
-
-Enhance: Add more features from your course syllabus
-
-Document: Create video demo and presentation
-
-Share: Submit to lecturers and add to your portfolio
 ```
