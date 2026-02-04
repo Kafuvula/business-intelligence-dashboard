@@ -219,7 +219,7 @@ business-intelligence-dashboard/
 
 1. **Clone and setup:**
 ```bash
-git clone https://github.com/gomezgani/business-intelligence-dashboard.git
+git clone https://github.com/Kafuvula/business-intelligence-dashboard.git
 cd business-intelligence-dashboard
 
 # Setup virtual environment

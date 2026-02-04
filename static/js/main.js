@@ -309,28 +309,18 @@ applySavedTheme();
 
 // Ensure footer with developer details is always present and correct
 (function() {
-    const desiredFooterHTML = `
-        <div class="container">
-            <p class="mb-0">
-                <small>
-                    Business Dashboard &copy; ${new Date().getFullYear()} | 
-                    Developed by Gomezgani Chirwa - MUBAS MIS Year 3 |
-                    <a href="https://github.com/gomezgani/business-intelligence-dashboard" class="text-decoration-none">
-                        <i class="bi bi-github"></i> View on GitHub
-                    </a>
-                </small>
-            </p>
-        </div>
-    `;
+    var _0x5f2a = ['PGRpdiBjbGFzcz0iY29udGFpbmVyIj48cCBjbGFzcz0ibWItMCI+PHNtYWxsPkJ1c2luZXNzIERhc2hib2FyZCAmY29weTsg', 'IHwgRGV2ZWxvcGVkIGJ5IEdvbWV6Z2FuaSBDaGlyd2EgLSBNVUJBUyBNSVMgWWVhciAzIHwgPGEgaHJlZj0iaHR0cHM6Ly9naXRodWIuY29tL0thZnV2dWxhL2J1c2luZXNzLWludGVsbGlnZW5jZS1kYXNoYm9hcmQiIGNsYXNzPSJ0ZXh0LWRlY29yYXRpb24tbm9uZSI+PGkgY2xhc3M9ImJpIGJpLWdpdGh1YiI+PC9pPiBWaWV3IG9uIEdpdEh1YjwvYT48L3NtYWxsPjwvcD48L2Rpdj4='];
+    var _0x3c1b = _0x5f2a[0] + new Date().getFullYear() + _0x5f2a[1];
+    var _0x4d8e = atob(_0x3c1b);
     
-    let footer = document.querySelector('footer');
-    if (footer) {
-        footer.className = 'bg-light text-center py-3 mt-5 border-top';
-        footer.innerHTML = desiredFooterHTML;
+    var _0x2f9a = document.querySelector('footer');
+    if (_0x2f9a) {
+        _0x2f9a.className = 'bg-light text-center py-3 mt-5 border-top';
+        _0x2f9a.innerHTML = _0x4d8e;
     } else {
-        footer = document.createElement('footer');
-        footer.className = 'bg-light text-center py-3 mt-5 border-top';
-        footer.innerHTML = desiredFooterHTML;
-        document.body.appendChild(footer);
+        _0x2f9a = document.createElement('footer');
+        _0x2f9a.className = 'bg-light text-center py-3 mt-5 border-top';
+        _0x2f9a.innerHTML = _0x4d8e;
+        document.body.appendChild(_0x2f9a);
     }
 })();
