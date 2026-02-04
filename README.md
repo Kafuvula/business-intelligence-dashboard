@@ -23,7 +23,7 @@ So, I decided to build one. This isn't just another coding exercise for a grade.
 
 ## 🎓 How This Connects to My Studies
 
-This year at MUBAS, I'm taking 6 modules. This project uses something from each one:
+This year semester 1 at MUBAS, I'm taking 6 modules. This project uses something from each one:
 
 | Subject | What I Used Here |
 |---------|------------------|
