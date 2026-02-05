@@ -215,7 +215,7 @@ This is a learning project and might have bugs. If you want to use it for a real
 
 License:
 This project is under the MIT License - meaning you can use, modify and share it, but I'm not responsible if something goes wrong.
-```bash
+
 <div align="center">
 🎓 Student by Day, Coder by Night
 "The best way to learn is to build something you care about."
@@ -225,5 +225,5 @@ Project Status: Actively Developing
 Commitment: Daily progress updates
 
 </div> 
-```
+
 
